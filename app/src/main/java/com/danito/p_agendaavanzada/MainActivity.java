@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imagenPerfil.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("image/*");
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivityForResult(intent, COD_ELEGIR_IMAGEN);
                             dialog.cancel();
