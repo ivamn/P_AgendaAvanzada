@@ -24,7 +24,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -38,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView;
     Adaptador adaptador;
     SwipeDetector swipeDetector;
+    Dato aux;
+
     private final int COD_ACTIVITY_EDITAR = 1;
     private final int COD_ACTIVITY_ADD = 2;
     private final int COD_ELEGIR_IMAGEN = 3;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adaptador.setOnTouchListener(swipeDetector);
         adaptador.setImageClickListener(new OnImageClickListener() {
             @Override
-            public void onImageClick(Dato dato) {
+            public void onImageClick(final Dato dato) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater = MainActivity.this.getLayoutInflater();
                 View vista = inflater.inflate(R.layout.perfil_contacto, null);
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("image/*");
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivityForResult(intent, COD_ELEGIR_IMAGEN);
+                            aux = dato;
                             dialog.cancel();
                         }
                     }
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             datos.add(d);
         } else if (requestCode == COD_ELEGIR_IMAGEN && resultCode == RESULT_OK && data != null) {
             Uri rutaImagen = data.getData();
-            datos.get(indiceListaPulsado).setImagen(rutaImagen);
+            aux.setImagen(rutaImagen);
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Se ha cancelado la operación", Toast.LENGTH_LONG).show();
         }

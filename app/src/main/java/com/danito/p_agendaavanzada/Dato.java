@@ -12,7 +12,7 @@ public class Dato implements Parcelable {
     private Uri imagen;
 
     public Dato() {
-        this.imagen = Uri.parse("/data/data/com.danito.p_agendaavanzada/ic_contacto.png");
+        this.imagen = Uri.parse("/data/data/com.danito.p_agendaavanzada/files/ic_contacto.png");
     }
 
     public Dato(String nombre, String apellido, String telefono, String correo) {

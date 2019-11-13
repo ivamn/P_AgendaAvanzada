@@ -32,7 +32,7 @@ public class AccionContacto extends AppCompatActivity implements View.OnFocusCha
         setContentView(R.layout.editar_contacto);
         Intent intentRecibido = getIntent();
         datoRecibido = intentRecibido.getParcelableExtra("contacto");
-
+        resetTint();
         proposito = datoRecibido == null ? ADD : EDITAR;
 
         editNombre = findViewById(R.id.editNombre);
@@ -143,4 +143,6 @@ public class AccionContacto extends AppCompatActivity implements View.OnFocusCha
             DrawableCompat.setTint(d, ContextCompat.getColor(getApplicationContext(), R.color.colorBaseIconos));
         }
     }
+
+
 }
