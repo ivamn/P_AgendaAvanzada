@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adaptador.setImageClickListener(new OnImageClickListener() {
             @Override
             public void onImageClick(final Dato dato) {
-                elegirImagen(dato);
+                mostrarPerfil(dato);
             }
         });
         recyclerView = findViewById(R.id.recycler);
@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LayoutInflater inflater = MainActivity.this.getLayoutInflater();
         View vista = inflater.inflate(R.layout.perfil_contacto, null);
         TextView nombrePerfil = vista.findViewById(R.id.nombrePerfil);
+        ImageView imagenPerfil = vista.findViewById(R.id.imagenPerfil);
+        imagenPerfil.setImageURI(dato.getImagen());
         nombrePerfil.setText(dato.getNombre());
         builder.setView(vista);
         final AlertDialog dialog = builder.create();
@@ -90,34 +92,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imagenCamara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tomarFoto(dato);
+                tomarFoto(dato, dialog);
             }
         });
         ImageView imagenGaleria = vista.findViewById(R.id.botonGaleria);
         imagenGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                elegirImagen(dato);
+                elegirImagen(dato, dialog);
             }
         });
         dialog.show();
     }
 
-    private void elegirImagen(Dato dato) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+    private void elegirImagen(Dato dato, AlertDialog dialog) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*");
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, COD_ELEGIR_IMAGEN);
             datoTemp = dato;
         }
+        dialog.cancel();
     }
 
-    private void tomarFoto(Dato dato) {
+    private void tomarFoto(Dato dato, AlertDialog dialog) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, COD_TOMAR_FOTO);
             datoTemp = dato;
         }
+        dialog.cancel();
     }
 
     private void llamarContacto(final Dato d) {
