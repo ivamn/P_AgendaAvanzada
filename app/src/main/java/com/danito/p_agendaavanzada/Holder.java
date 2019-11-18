@@ -33,7 +33,7 @@ class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
     }
 
     public void setImageClickListener(OnImageClickListener listener) {
-        if (listener != null){
+        if (listener != null) {
             imageClickListener = listener;
         }
     }

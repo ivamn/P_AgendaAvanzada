@@ -29,7 +29,7 @@ public class AccionContacto extends AppCompatActivity implements View.OnFocusCha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.editar_contacto);
+        setContentView(R.layout.accion_contacto);
         Intent intentRecibido = getIntent();
         datoRecibido = intentRecibido.getParcelableExtra("contacto");
         resetTint();

@@ -12,15 +12,15 @@ public class Dato implements Parcelable {
     private Uri imagen;
 
     public Dato() {
-        this.imagen = Uri.parse("/data/data/com.danito.p_agendaavanzada/files/ic_contacto.png");
+        imagen = Uri.parse("");
     }
 
-    public Dato(String nombre, String apellido, String telefono, String correo) {
+    public Dato(String nombre, String apellido, String telefono, String correo, Uri imagen) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
-        this.imagen = Uri.parse("/data/data/com.danito.p_agendaavanzada/ic_contacto.png");
+        this.imagen = imagen;
     }
 
     public String getNombre() {

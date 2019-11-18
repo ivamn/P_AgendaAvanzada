@@ -2,6 +2,9 @@ package com.danito.p_agendaavanzada;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,16 +36,17 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
-    ArrayList<Dato> datos;
-    int indiceListaPulsado;
-    RecyclerView recyclerView;
-    Adaptador adaptador;
-    SwipeDetector swipeDetector;
-    Dato aux;
+    public ArrayList<Dato> datos;
+    private int indiceListaPulsado;
+    private RecyclerView recyclerView;
+    private Adaptador adaptador;
+    private SwipeDetector swipeDetector;
+    private Dato datoTemp;
 
     private final int COD_ACTIVITY_EDITAR = 1;
     private final int COD_ACTIVITY_ADD = 2;
     private final int COD_ELEGIR_IMAGEN = 3;
+    private final int COD_TOMAR_FOTO = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,28 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adaptador.setImageClickListener(new OnImageClickListener() {
             @Override
             public void onImageClick(final Dato dato) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-                View vista = inflater.inflate(R.layout.perfil_contacto, null);
-                ImageView imagenPerfil = vista.findViewById(R.id.imagenPerfil);
-                imagenPerfil.setImageURI(dato.getImagen());
-                TextView nombrePerfil = vista.findViewById(R.id.nombrePerfil);
-                nombrePerfil.setText(dato.getNombre());
-                builder.setView(vista);
-                final AlertDialog dialog = builder.create();
-                imagenPerfil.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                        intent.setType("image/*");
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(intent, COD_ELEGIR_IMAGEN);
-                            aux = dato;
-                            dialog.cancel();
-                        }
-                    }
-                });
-                dialog.show();
+                elegirImagen(dato);
             }
         });
         recyclerView = findViewById(R.id.recycler);
@@ -92,6 +76,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 addContacto();
             }
         });
+    }
+
+    private void mostrarPerfil(final Dato dato) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+        View vista = inflater.inflate(R.layout.perfil_contacto, null);
+        TextView nombrePerfil = vista.findViewById(R.id.nombrePerfil);
+        nombrePerfil.setText(dato.getNombre());
+        builder.setView(vista);
+        final AlertDialog dialog = builder.create();
+        ImageView imagenCamara = vista.findViewById(R.id.botonCamara);
+        imagenCamara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tomarFoto(dato);
+            }
+        });
+        ImageView imagenGaleria = vista.findViewById(R.id.botonGaleria);
+        imagenGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                elegirImagen(dato);
+            }
+        });
+        dialog.show();
+    }
+
+    private void elegirImagen(Dato dato) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, COD_ELEGIR_IMAGEN);
+            datoTemp = dato;
+        }
+    }
+
+    private void tomarFoto(Dato dato) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, COD_TOMAR_FOTO);
+            datoTemp = dato;
+        }
     }
 
     private void llamarContacto(final Dato d) {
@@ -188,7 +214,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             datos.add(d);
         } else if (requestCode == COD_ELEGIR_IMAGEN && resultCode == RESULT_OK && data != null) {
             Uri rutaImagen = data.getData();
-            aux.setImagen(rutaImagen);
+            datoTemp.setImagen(rutaImagen);
+        } else if (requestCode == COD_TOMAR_FOTO && resultCode == RESULT_OK && data != null) {
+
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Se ha cancelado la operación", Toast.LENGTH_LONG).show();
         }
