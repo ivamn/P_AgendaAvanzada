@@ -7,16 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View vista = inflater.inflate(R.layout.perfil_contacto, null);
         TextView nombrePerfil = vista.findViewById(R.id.nombrePerfil);
         ImageView imagenPerfil = vista.findViewById(R.id.imagenPerfil);
-        imagenPerfil.setImageURI(dato.getImagen());
+        imagenPerfil.setImageBitmap(dato.getImagen());
         nombrePerfil.setText(dato.getNombre());
         builder.setView(vista);
         final AlertDialog dialog = builder.create();
@@ -218,14 +219,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             datos.add(d);
         } else if (requestCode == COD_ELEGIR_IMAGEN && resultCode == RESULT_OK && data != null) {
             Uri rutaImagen = data.getData();
-            datoTemp.setImagen(rutaImagen);
+            datoTemp.setImagen(bitmapFromUri(rutaImagen));
         } else if (requestCode == COD_TOMAR_FOTO && resultCode == RESULT_OK && data != null) {
-
+            datoTemp.setImagen((Bitmap) data.getExtras().get("data"));
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Se ha cancelado la operación", Toast.LENGTH_LONG).show();
         }
         recyclerView.setAdapter(adaptador);
-        guardarDatos();
+        if (resultCode != RESULT_CANCELED) {
+            guardarDatos();
+        }
     }
 
     @Override
@@ -281,7 +284,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 nuevoDato.setCorreo(parser.nextText());
                                 break;
                             case "imagen":
-                                nuevoDato.setImagen(Uri.parse(parser.nextText()));
+                                nuevoDato.setImagen(
+                                        convertirStringBitmap(parser.nextText())
+                                );
                                 break;
                         }
                         break;
@@ -339,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 serializer.text(d.getCorreo());
                 serializer.endTag(null, "correo");
                 serializer.startTag(null, "imagen");
-                serializer.text(d.getImagen().toString());
+                serializer.text(convertirImagenString(d.getImagen()));
                 serializer.endTag(null, "imagen");
                 serializer.endTag(null, "contacto");
             }
@@ -349,5 +354,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Bitmap bitmapFromUri(Uri uri) {
+        ImageView imageViewTemp = new ImageView(this);
+        imageViewTemp.setImageURI(uri);
+        BitmapDrawable d = (BitmapDrawable) imageViewTemp.getDrawable();
+        return d.getBitmap();
+    }
+
+    public Bitmap convertirStringBitmap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    public String convertirImagenString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
     }
 }

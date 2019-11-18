@@ -1,5 +1,6 @@
 package com.danito.p_agendaavanzada;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,13 +10,13 @@ public class Dato implements Parcelable {
     private String apellido;
     private String telefono;
     private String correo;
-    private Uri imagen;
+    private Bitmap imagen;
 
     public Dato() {
-        imagen = Uri.parse("");
+        imagen = Bitmap.createBitmap(30,30, Bitmap.Config.RGB_565);
     }
 
-    public Dato(String nombre, String apellido, String telefono, String correo, Uri imagen) {
+    public Dato(String nombre, String apellido, String telefono, String correo, Bitmap imagen) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -55,11 +56,11 @@ public class Dato implements Parcelable {
         this.correo = correo;
     }
 
-    public Uri getImagen() {
+    public Bitmap getImagen() {
         return imagen;
     }
 
-    public void setImagen(Uri imagen) {
+    public void setImagen(Bitmap imagen) {
         this.imagen = imagen;
     }
 
@@ -82,7 +83,7 @@ public class Dato implements Parcelable {
         this.apellido = in.readString();
         this.telefono = in.readString();
         this.correo = in.readString();
-        this.imagen = in.readParcelable(Uri.class.getClassLoader());
+        this.imagen = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Dato> CREATOR = new Parcelable.Creator<Dato>() {

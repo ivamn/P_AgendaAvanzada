@@ -28,7 +28,7 @@ class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         apellido.setText(d.getApellido());
         telefono.setText(d.getTelefono());
         correo.setText(d.getCorreo());
-        imagen.setImageURI(d.getImagen());
+        imagen.setImageBitmap(d.getImagen());
         dato = d;
     }
 
