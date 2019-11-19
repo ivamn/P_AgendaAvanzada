@@ -160,11 +160,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (d.getCorreo().isEmpty()) {
                     Toast.makeText(MainActivity.this, "El contacto no tiene correo electrónico", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, d.getCorreo());
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.fromParts("mailto", d.getCorreo(), null));
+                    Intent chooser = Intent.createChooser(intent, "Enviar mensaje...");
+                    startActivity(chooser);
                 }
             }
         });
