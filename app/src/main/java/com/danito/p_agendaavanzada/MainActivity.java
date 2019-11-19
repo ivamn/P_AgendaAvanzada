@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int which) {
                 datos.remove(datos.get(recyclerView.getChildAdapterPosition(v)));
                 recyclerView.setAdapter(adaptador);
+                guardarDatos();
             }
         });
         builder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {

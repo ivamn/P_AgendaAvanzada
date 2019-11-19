@@ -39,12 +39,12 @@ public class Adaptador extends RecyclerView.Adapter implements View.OnClickListe
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((Holder)holder).bind(((MainActivity)context).datos.get(position));
+        ((Holder) holder).bind(((MainActivity) context).datos.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return ((MainActivity)context).datos.size();
+        return ((MainActivity) context).datos.size();
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
@@ -74,7 +74,7 @@ public class Adaptador extends RecyclerView.Adapter implements View.OnClickListe
         return false;
     }
 
-    public void setOnTouchListener(View.OnTouchListener listener){
+    public void setOnTouchListener(View.OnTouchListener listener) {
         if (listener != null) {
             this.touchListener = listener;
         }
@@ -82,7 +82,7 @@ public class Adaptador extends RecyclerView.Adapter implements View.OnClickListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (touchListener != null){
+        if (touchListener != null) {
             touchListener.onTouch(v, event);
         }
         return false;
