@@ -87,7 +87,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ##### `mostrarPerfil`
 
-En éste método lo único que hacemos es mostrar un diálogo enseñando la imágen de perfil y dos iconos, uno para elegir la imágen de la galería y otro para tomar una foto
+En éste método lo único que hacemos es mostrar un diálogo enseñando la imagen de perfil y dos iconos, uno para elegir la imagen de la galería y otro para tomar una foto
 
 ```java
 private void mostrarPerfil(final Dato dato) {
@@ -282,7 +282,7 @@ private void addContacto() {
 
 ##### `bitmapFromUri`
 
-Este método lo utilizo porque, al llamar al Intent de elegir imágen, me devuelve un Uri y no un Bitmap y utilzando este método, lo convierto a Bitmap.
+Este método lo utilizo porque, al llamar al Intent de elegir imagen, me devuelve un Uri y no un Bitmap y utilzando este método, lo convierto a Bitmap.
 
 ```java
 private Bitmap bitmapFromUri(Uri uri) {
@@ -908,7 +908,7 @@ Realmente son una serie `TextInputLayout` y `TextInputEditText` para poder hacer
 
 #### Perfil XML <a name="perfil"></a>
 
-El diálogo que sale cada vez que pulsas sobre una imágen de un contacto
+El diálogo que sale cada vez que pulsas sobre una imagen de un contacto
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
