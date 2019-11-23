@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         datos = new ArrayList<>();
         cargarDatos();
         swipeDetector = new SwipeDetector();
-        adaptador = new Adaptador(this);
+        adaptador = new Adaptador(datos);
         adaptador.setOnClickListener(this);
         adaptador.setOnLongClickListener(this);
         adaptador.setOnTouchListener(swipeDetector);

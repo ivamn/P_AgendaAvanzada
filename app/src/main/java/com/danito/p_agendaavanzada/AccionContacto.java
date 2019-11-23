@@ -91,16 +91,16 @@ public class AccionContacto extends AppCompatActivity implements View.OnFocusCha
         Dato d = new Dato();
         d.setNombre(editNombre.getText().toString());
         d.setApellido(editApellido.getText().toString());
-        d.setTelefono(editCorreo.getText().toString());
-        d.setCorreo(editTelefono.getText().toString());
+        d.setTelefono(editTelefono.getText().toString());
+        d.setCorreo(editCorreo.getText().toString());
         return d;
     }
 
     public void editarContacto() {
         datoRecibido.setNombre(editNombre.getText().toString());
         datoRecibido.setApellido(editApellido.getText().toString());
-        datoRecibido.setTelefono(editCorreo.getText().toString());
-        datoRecibido.setCorreo(editTelefono.getText().toString());
+        datoRecibido.setTelefono(editTelefono.getText().toString());
+        datoRecibido.setCorreo(editCorreo.getText().toString());
     }
 
     @Override

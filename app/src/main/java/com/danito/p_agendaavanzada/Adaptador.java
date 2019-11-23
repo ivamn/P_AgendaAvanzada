@@ -1,6 +1,5 @@
 package com.danito.p_agendaavanzada;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,15 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class Adaptador extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
-    private Context context;
+    private ArrayList<Dato> datos;
     private View.OnClickListener clickListener;
     private OnImageClickListener imageClickListener;
     private View.OnLongClickListener longClickListener;
     private View.OnTouchListener touchListener;
 
-    public Adaptador(Context context) {
-        this.context = context;
+    public Adaptador(ArrayList<Dato> datos) {
+        this.datos = datos;
     }
 
     @NonNull
@@ -39,12 +40,12 @@ public class Adaptador extends RecyclerView.Adapter implements View.OnClickListe
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((Holder) holder).bind(((MainActivity) context).datos.get(position));
+        ((Holder) holder).bind(datos.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return ((MainActivity) context).datos.size();
+        return datos.size();
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
